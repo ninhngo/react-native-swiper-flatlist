@@ -147,12 +147,10 @@ export default class SwiperFlatList extends PureComponent {
       // Divide the horizontal offset by the width of the view to see which page is visible
       index = Math.floor(contentOffset.x / layoutMeasurement.width);
     }
-
     if (autoplay) {
       this._autoplay(index);
     }
     this.setState({ paginationIndex: index });
-
     if (onMomentumScrollEnd) {
       onMomentumScrollEnd();
     }
@@ -171,7 +169,7 @@ export default class SwiperFlatList extends PureComponent {
       {this._data.map((_, index) => (
         <TouchableOpacity
           style={[
-            styles.pagination,
+            this.props.dotStyle || styles.pagination,
             this.state.paginationIndex === index
               ? this.pagination.active
               : this.pagination.default,
