@@ -51,14 +51,14 @@ export default class SwiperFlatList extends PureComponent {
 
   componentWillMount() {
     this.setup(this.props);
-    this.setState({ paginationIndex: this.props.index });
+    this.setState({ index: this.props.index });
   }
   componentDidMount() {
     const { autoplay, index } = this.props;
     if (autoplay) {
       this._autoplay(index);
     }
-
+    console.log('componentDidMount===============', index)
     if (index !== 0) {
       this._scrollToIndex(index, false);
     }
@@ -133,7 +133,7 @@ export default class SwiperFlatList extends PureComponent {
       if (this.flatListRef) {
         this.flatListRef.scrollToIndex(params);
       }
-      return { paginationIndex: index };
+      return { index: index };
     });
   };
 
@@ -150,9 +150,9 @@ export default class SwiperFlatList extends PureComponent {
     if (autoplay) {
       this._autoplay(index);
     }
-    this.setState({ paginationIndex: index });
+    this.setState({ index: index });
     if (onMomentumScrollEnd) {
-      onMomentumScrollEnd();
+      onMomentumScrollEnd(this.state);
     }
   };
 
@@ -170,7 +170,7 @@ export default class SwiperFlatList extends PureComponent {
         <TouchableOpacity
           style={[
             this.props.dotStyle || styles.pagination,
-            this.state.paginationIndex === index
+            this.state.index === index
               ? this.pagination.active
               : this.pagination.default,
           ]}
@@ -189,6 +189,7 @@ export default class SwiperFlatList extends PureComponent {
           ref={component => {
             this.flatListRef = component;
           }}
+          {...props}
           keyExtractor={this._keyExtractor}
           horizontal={!vertical}
           showsHorizontalScrollIndicator={false}
@@ -196,7 +197,6 @@ export default class SwiperFlatList extends PureComponent {
           pagingEnabled
           onMomentumScrollEnd={this._onMomentumScrollEnd}
           onScrollToIndexFailed={this._onScrollToIndexFailed}
-          {...props}
           data={this._data}
           renderItem={this._renderItem}
           // inverted
